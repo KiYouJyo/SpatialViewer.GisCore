@@ -31,7 +31,7 @@ public sealed class CorePrimitivesTests
             new SpatialIndexEntry<int>(new Envelope2D(10, 10, 20, 20), 3),
             new SpatialIndexEntry<int>(new Envelope2D(-5, -5, -1, -1), 4),
         };
-        var index = PackedRTree<int>.Build(entries, nodeCapacity: 4);
+        var index = new PackedRTree<int>(entries, nodeCapacity: 4);
 
         var matches = index.Query(new Envelope2D(1, 1, 6, 6));
 
@@ -45,7 +45,7 @@ public sealed class CorePrimitivesTests
     [Fact]
     public void PackedRTreeHandlesEmptyIndexWithoutInventingMatches()
     {
-        var index = PackedRTree<int>.Build(Array.Empty<SpatialIndexEntry<int>>());
+        var index = new PackedRTree<int>(Array.Empty<SpatialIndexEntry<int>>());
 
         var matches = index.Query(new Envelope2D(0, 0, 1, 1));
 
