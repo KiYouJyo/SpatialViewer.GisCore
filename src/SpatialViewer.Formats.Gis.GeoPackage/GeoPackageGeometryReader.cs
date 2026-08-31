@@ -53,7 +53,7 @@ internal static class GeoPackageGeometryReader
         };
 
         EnsureAvailable(blob, 8, envelopeLength, "GeoPackage geometry envelope");
-        var declaredBounds = envelopeLength == 0
+        GisBoundingBox? declaredBounds = envelopeLength == 0
             ? null
             : ParseEnvelope(blob.Slice(8, envelopeLength), envelopeCode, littleEndianHeader);
 
