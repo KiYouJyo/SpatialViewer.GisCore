@@ -16,6 +16,11 @@ All notable changes to SpatialViewer.GisCore will be documented in this file.
 - Managed GeoPackage vector reader for feature tables, geometry columns, attributes, nullable geometry, GeoPackageBinary/WKB, Z/M, SRS_ID validation, and RTree-assisted extent queries.
 - Explicit projection service with WKT1/WKT2 EPSG authority parsing, axis-order policy, and tested EPSG:4326 ↔ EPSG:3857 transforms preserving Z/M.
 - Backend-neutral immutable packed R-tree plus lightweight Shapefile record-envelope candidate filtering.
+- Raster domain contracts for affine geotransforms, pixel windows, pixel anchors, bands, nodata, overviews, RGBA results, and raster reader adapters.
+- Managed GeoTIFF adapter with GeoKey EPSG metadata, ModelPixelScale/Tiepoint and ModelTransformation, PixelIsArea/PixelIsPoint handling, nodata/color metadata, internal overviews, and tile/strip window decoding.
+- PNG/JPEG world-image adapter with PGW/JGW/long-form/WLD sidecars, optional PRJ, rotated affine georeferencing, and managed RGBA decoding.
+- Byte-budgeted raster LRU cache, overview selector, latest-request coordinator, and `RasterViewportReader` integration that cancels superseded viewport work.
+- Synthetic Deflate tiled/overview GeoTIFF, stripped GeoTIFF, PNG/world-file, and JPEG/world-file regression fixtures.
 - CI, release workflow, architecture notes, compatibility matrix, and implementation roadmap.
 
 ### Changed
@@ -24,11 +29,18 @@ All notable changes to SpatialViewer.GisCore will be documented in this file.
 - `GisCoordinate` preserves an optional M ordinate in addition to X/Y/Z.
 - Phase 2 projects are explicit solution members so both Debug and Release configurations build Projections, Shapefile, and GeoPackage directly.
 - GeoPackage connections are read-only, private-cache, and non-pooled to avoid hidden file-handle retention.
+- Phase 3 advances the repository version baseline to `0.3.0` and registers GeoTIFF/WorldImage adapters directly in Debug and Release solution configurations.
+- GeoTIFF viewport reads decode only intersecting tile/strip blocks and can select a lower-resolution internal overview before resampling.
+- World-file and GeoTIFF PixelIsPoint center semantics are normalized to Core's pixel-corner affine model without silently changing CRS metadata.
 
-## [0.2.0] - Planned
+## [0.3.0] - Planned
 
-Phase 2 implementation milestone: GeoJSON + Shapefile + GeoPackage vector ingestion, managed CRS baseline, explicit coordinate transforms, and spatial-index foundations. Release/tag remains pending merge and release workflow validation.
+Phase 3 raster milestone: GeoTIFF local window/overview ingestion, PNG/JPEG world-image georeferencing, raster cache/viewport cancellation, and CI-backed raster fixtures. Remote HTTP Range COG access remains Phase 4; large real-world memory/performance benchmarking remains Phase 6.
 
-## [0.1.0] - Planned
+## [0.2.0] - Merged 2026-08-31
+
+Phase 2 implementation milestone: GeoJSON + Shapefile + GeoPackage vector ingestion, managed CRS baseline, explicit coordinate transforms, and spatial-index foundations.
+
+## [0.1.0] - Foundation
 
 Foundation milestone: stable core contracts plus first end-to-end GeoJSON read-to-render path.
