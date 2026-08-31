@@ -406,7 +406,7 @@ public sealed class GeoJsonDataSourceReader : IGisDataSourceReader
         return polygons;
     }
 
-    private static void ValidateLinearRing(IReadOnlyList<GisCoordinate> ring, string context)
+    private static void ValidateLinearRing(List<GisCoordinate> ring, string context)
     {
         if (ring.Count == 0)
         {

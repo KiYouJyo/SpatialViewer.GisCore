@@ -62,7 +62,7 @@ public sealed class VectorRenderFrameBuilderTests
         var feature = new GisFeature("feature-1", geometry, attributes);
         var frame = await GisVectorRenderFrameBuilder.BuildAsync(
             ToAsync(feature),
-            new Envelope2D(-1, -1, 10, 10)).ConfigureAwait(false);
+            new Envelope2D(-1, -1, 10, 10)).ConfigureAwait(true);
 
         Assert.Equal(6, frame.Primitives.Count);
         Assert.Equal(2, frame.Primitives.Count(item => item.Kind == GisRenderPrimitiveKind.Point));
@@ -96,7 +96,7 @@ public sealed class VectorRenderFrameBuilderTests
 
         var frame = await GisVectorRenderFrameBuilder.BuildAsync(
             ToAsync(features),
-            new Envelope2D(0, 0, 10, 10)).ConfigureAwait(false);
+            new Envelope2D(0, 0, 10, 10)).ConfigureAwait(true);
 
         var primitive = Assert.Single(frame.Primitives);
         Assert.Equal("inside", primitive.FeatureId);

@@ -14,7 +14,7 @@ public sealed class GeoJsonReaderTests
     public async Task ReadsAllGeometryTypesAndKeepsMissingCrsUnknown()
     {
         var path = Fixture("all-geometries.geojson");
-        var metadata = await _reader.ReadMetadataAsync(path).ConfigureAwait(false);
+        var metadata = await _reader.ReadMetadataAsync(path).ConfigureAwait(true);
         var layer = Assert.IsType<VectorLayerMetadata>(Assert.Single(metadata.Layers));
 
         Assert.Equal("geojson", metadata.SourceKind);
@@ -23,7 +23,7 @@ public sealed class GeoJsonReaderTests
         Assert.True(layer.SpatialReference.IsUnknown);
         Assert.Equal(new Envelope2D(-10, -10, 30, 30), layer.Bounds);
 
-        var features = await ReadAllAsync(path, layer.Name).ConfigureAwait(false);
+        var features = await ReadAllAsync(path, layer.Name).ConfigureAwait(true);
         Assert.Collection(
             features.Take(7),
             feature => Assert.IsType<PointGeometry>(feature.Geometry),
@@ -42,9 +42,9 @@ public sealed class GeoJsonReaderTests
     public async Task PreservesFeatureIdAttributesBboxAndZ()
     {
         var path = Fixture("all-geometries.geojson");
-        var metadata = await _reader.ReadMetadataAsync(path).ConfigureAwait(false);
+        var metadata = await _reader.ReadMetadataAsync(path).ConfigureAwait(true);
         var layer = Assert.IsType<VectorLayerMetadata>(Assert.Single(metadata.Layers));
-        var feature = (await ReadAllAsync(path, layer.Name).ConfigureAwait(false))[0];
+        var feature = (await ReadAllAsync(path, layer.Name).ConfigureAwait(true))[0];
 
         Assert.Equal("42", feature.Id);
         Assert.Equal(new GisBoundingBox(new Envelope2D(1, 2, 1, 2)), feature.DeclaredBounds);
@@ -70,13 +70,13 @@ public sealed class GeoJsonReaderTests
     public async Task ExtentFilterUsesActualFeatureBounds()
     {
         var path = Fixture("all-geometries.geojson");
-        var metadata = await _reader.ReadMetadataAsync(path).ConfigureAwait(false);
+        var metadata = await _reader.ReadMetadataAsync(path).ConfigureAwait(true);
         var layer = Assert.IsType<VectorLayerMetadata>(Assert.Single(metadata.Layers));
 
         var features = await ReadAllAsync(
             path,
             layer.Name,
-            new Envelope2D(0.5, 0.5, 2.5, 2.5)).ConfigureAwait(false);
+            new Envelope2D(0.5, 0.5, 2.5, 2.5)).ConfigureAwait(true);
 
         Assert.Contains(features, feature => feature.Id == "42");
         Assert.Contains(features, feature => feature.Id == "mp");
@@ -91,7 +91,7 @@ public sealed class GeoJsonReaderTests
     public async Task ReadsDeclaredLegacyEpsgButDoesNotInventOne()
     {
         var path = Fixture("legacy-crs.geojson");
-        var metadata = await _reader.ReadMetadataAsync(path).ConfigureAwait(false);
+        var metadata = await _reader.ReadMetadataAsync(path).ConfigureAwait(true);
         var layer = Assert.IsType<VectorLayerMetadata>(Assert.Single(metadata.Layers));
 
         Assert.Equal("EPSG", layer.SpatialReference.Authority);
@@ -107,8 +107,8 @@ public sealed class GeoJsonReaderTests
         var exception = await Assert.ThrowsAsync<InvalidDataException>(
             async () =>
             {
-                await _reader.ReadMetadataAsync(path).ConfigureAwait(false);
-            }).ConfigureAwait(false);
+                await _reader.ReadMetadataAsync(path).ConfigureAwait(true);
+            }).ConfigureAwait(true);
 
         Assert.Contains("not closed", exception.Message, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("coordinates", exception.Message, StringComparison.OrdinalIgnoreCase);
@@ -122,8 +122,8 @@ public sealed class GeoJsonReaderTests
         var exception = await Assert.ThrowsAsync<InvalidDataException>(
             async () =>
             {
-                await _reader.ReadMetadataAsync(path).ConfigureAwait(false);
-            }).ConfigureAwait(false);
+                await _reader.ReadMetadataAsync(path).ConfigureAwait(true);
+            }).ConfigureAwait(true);
 
         Assert.Contains(path, exception.Message, StringComparison.Ordinal);
         Assert.Contains("not valid JSON", exception.Message, StringComparison.OrdinalIgnoreCase);
@@ -132,18 +132,18 @@ public sealed class GeoJsonReaderTests
     [Fact]
     public async Task ReadsGeneratedLargeFixtureWithoutChangingCoordinates()
     {
-        var path = await WriteLargeFixtureAsync(4096).ConfigureAwait(false);
+        var path = await WriteLargeFixtureAsync(4096).ConfigureAwait(true);
 
         try
         {
-            var metadata = await _reader.ReadMetadataAsync(path).ConfigureAwait(false);
+            var metadata = await _reader.ReadMetadataAsync(path).ConfigureAwait(true);
             var layer = Assert.IsType<VectorLayerMetadata>(Assert.Single(metadata.Layers));
 
             Assert.Equal(4096L, layer.FeatureCount);
             Assert.Equal(GisGeometryType.Point, layer.GeometryType);
             Assert.Equal(new Envelope2D(0, 0, 63, 63), layer.Bounds);
 
-            var features = await ReadAllAsync(path, layer.Name).ConfigureAwait(false);
+            var features = await ReadAllAsync(path, layer.Name).ConfigureAwait(true);
             Assert.Equal(4096, features.Count);
 
             var last = Assert.IsType<PointGeometry>(features[^1].Geometry);
@@ -166,27 +166,27 @@ public sealed class GeoJsonReaderTests
               "geometry": { "type": "Point", "coordinates": [9, 8] },
               "properties": { "name": "single feature" }
             }
-            """).ConfigureAwait(false);
+            """).ConfigureAwait(true);
         var geometryPath = await WriteTemporaryAsync(
             """
             {
               "type": "LineString",
               "coordinates": [[1, 1], [2, 2]]
             }
-            """).ConfigureAwait(false);
+            """).ConfigureAwait(true);
 
         try
         {
-            var featureMetadata = await _reader.ReadMetadataAsync(featurePath).ConfigureAwait(false);
+            var featureMetadata = await _reader.ReadMetadataAsync(featurePath).ConfigureAwait(true);
             var featureLayer = Assert.IsType<VectorLayerMetadata>(Assert.Single(featureMetadata.Layers));
             var feature = Assert.Single(
-                await ReadAllAsync(featurePath, featureLayer.Name).ConfigureAwait(false));
+                await ReadAllAsync(featurePath, featureLayer.Name).ConfigureAwait(true));
             Assert.Equal("single", feature.Id);
 
-            var geometryMetadata = await _reader.ReadMetadataAsync(geometryPath).ConfigureAwait(false);
+            var geometryMetadata = await _reader.ReadMetadataAsync(geometryPath).ConfigureAwait(true);
             var geometryLayer = Assert.IsType<VectorLayerMetadata>(Assert.Single(geometryMetadata.Layers));
             var geometryFeature = Assert.Single(
-                await ReadAllAsync(geometryPath, geometryLayer.Name).ConfigureAwait(false));
+                await ReadAllAsync(geometryPath, geometryLayer.Name).ConfigureAwait(true));
             Assert.IsType<LineStringGeometry>(geometryFeature.Geometry);
             Assert.Empty(geometryFeature.Attributes);
         }
@@ -206,15 +206,15 @@ public sealed class GeoJsonReaderTests
               "type": "Point",
               "coordinates": [1, 2, 3, 4]
             }
-            """).ConfigureAwait(false);
+            """).ConfigureAwait(true);
 
         try
         {
             var exception = await Assert.ThrowsAsync<InvalidDataException>(
                 async () =>
                 {
-                    await _reader.ReadMetadataAsync(path).ConfigureAwait(false);
-                }).ConfigureAwait(false);
+                    await _reader.ReadMetadataAsync(path).ConfigureAwait(true);
+                }).ConfigureAwait(true);
 
             Assert.Contains("silently discarded", exception.Message, StringComparison.OrdinalIgnoreCase);
         }
@@ -228,12 +228,12 @@ public sealed class GeoJsonReaderTests
     public async Task GeoJsonReaderFeedsRenderFrameEndToEnd()
     {
         var path = Fixture("all-geometries.geojson");
-        var metadata = await _reader.ReadMetadataAsync(path).ConfigureAwait(false);
+        var metadata = await _reader.ReadMetadataAsync(path).ConfigureAwait(true);
         var layer = Assert.IsType<VectorLayerMetadata>(Assert.Single(metadata.Layers));
 
         var frame = await GisVectorRenderFrameBuilder.BuildAsync(
             _reader.ReadFeaturesAsync(path, layer.Name),
-            new Envelope2D(-10, -10, 30, 30)).ConfigureAwait(false);
+            new Envelope2D(-10, -10, 30, 30)).ConfigureAwait(true);
 
         Assert.Equal(11, frame.Primitives.Count);
         Assert.Equal(4, frame.Primitives.Count(item => item.Kind == GisRenderPrimitiveKind.Point));
@@ -250,7 +250,7 @@ public sealed class GeoJsonReaderTests
 
         await foreach (var feature in _reader
             .ReadFeaturesAsync(path, layerName, extent)
-            .ConfigureAwait(false))
+            .ConfigureAwait(true))
         {
             result.Add(feature);
         }
@@ -264,7 +264,7 @@ public sealed class GeoJsonReaderTests
     private static async Task<string> WriteTemporaryAsync(string content)
     {
         var path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.geojson");
-        await File.WriteAllTextAsync(path, content).ConfigureAwait(false);
+        await File.WriteAllTextAsync(path, content).ConfigureAwait(true);
         return path;
     }
 
@@ -293,6 +293,6 @@ public sealed class GeoJsonReaderTests
             features,
         });
 
-        return await WriteTemporaryAsync(content).ConfigureAwait(false);
+        return await WriteTemporaryAsync(content).ConfigureAwait(true);
     }
 }
