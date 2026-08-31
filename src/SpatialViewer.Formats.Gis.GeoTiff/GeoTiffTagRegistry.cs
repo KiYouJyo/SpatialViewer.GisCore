@@ -1,10 +1,10 @@
-using System.Runtime.CompilerServices;
 using BitMiracle.LibTiff.Classic;
 
 namespace SpatialViewer.Formats.Gis.GeoTiff;
 
 internal static class GeoTiffTagRegistry
 {
+    private static readonly Lock InitializationLock = new();
     private static readonly TiffFieldInfo[] FieldInfo =
     {
         CreateDoubleField(33550, "ModelPixelScaleTag"),
@@ -18,11 +18,25 @@ internal static class GeoTiffTagRegistry
     };
 
     private static Tiff.TiffExtendProc? _parentExtender;
+    private static bool _initialized;
 
-    [ModuleInitializer]
-    internal static void Initialize()
+    internal static void EnsureInitialized()
     {
-        _parentExtender = Tiff.SetTagExtender(RegisterTags);
+        if (_initialized)
+        {
+            return;
+        }
+
+        lock (InitializationLock)
+        {
+            if (_initialized)
+            {
+                return;
+            }
+
+            _parentExtender = Tiff.SetTagExtender(RegisterTags);
+            _initialized = true;
+        }
     }
 
     private static void RegisterTags(Tiff tiff)
