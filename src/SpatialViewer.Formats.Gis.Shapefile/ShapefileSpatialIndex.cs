@@ -29,7 +29,7 @@ internal static class ShapefileSpatialIndex
             }
         }
 
-        var tree = PackedRTree<int>.Build(entries);
+        var tree = new PackedRTree<int>(entries);
         var matches = tree.Query(extent);
         var result = new int[matches.Count];
 
