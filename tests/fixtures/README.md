@@ -26,5 +26,6 @@ All raster pixels are synthetic color ramps generated specifically for GisCore; 
 
 - `geotiff/phase3-tiled-overview.tif`: 32×32 RGB Deflate TIFF, 16×16 tiling, EPSG:3857 GeoKeys, ModelPixelScale/ModelTiepoint, nodata, and a 16×16 internal reduced-image overview. It verifies tiled window orientation, georeferencing and overview selection.
 - `geotiff/phase3-strip.tif`: 12×10 RGB Deflate TIFF with rows-per-strip=4 and EPSG:3857 georeferencing. It verifies that the stripped reader path returns correct top-left-oriented window pixels.
+- `geotiff/pixel-is-point.tif`: 4×3 RGB GeoTIFF with `RasterPixelIsPoint`; it verifies the half-pixel normalization from source pixel-center semantics to the Core pixel-corner affine/bounds model while retaining the Point anchor metadata.
 - `world-image/rotated.png` + `rotated.pgw` + `rotated.prj`: 12×10 synthetic RGBA PNG with a rotated world-file affine transform and EPSG:4326 PRJ.
 - `world-image/photo.jpg` + `photo.jgw` + `photo.prj`: 12×10 synthetic JPEG using the same affine/CRS semantics. Pixel-value assertions intentionally use the lossless PNG; JPEG tests validate decode/metadata/sidecar integration without assuming lossless samples.
