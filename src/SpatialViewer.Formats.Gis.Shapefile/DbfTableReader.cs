@@ -160,7 +160,7 @@ internal sealed class DbfTableReader : IAsyncDisposable
     private string DecodeText(ReadOnlySpan<byte> raw) =>
         _encoding.GetString(raw).TrimEnd('\0', ' ');
 
-    private object? ParseNumber(DbfField field, ReadOnlySpan<byte> raw)
+    private static object? ParseNumber(DbfField field, ReadOnlySpan<byte> raw)
     {
         var text = Encoding.ASCII.GetString(raw).Trim();
         if (text.Length == 0)
