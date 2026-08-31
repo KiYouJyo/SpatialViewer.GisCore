@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\SpatialViewer.Gis.Core\SpatialViewer.Gis.Core.csproj" />
+    <ProjectReference Include="..\SpatialViewer.Formats.Gis\SpatialViewer.Formats.Gis.csproj" />
+    <ProjectReference Include="..\SpatialViewer.Gis.Projections\SpatialViewer.Gis.Projections.csproj" />
+    <PackageReference Include="StbImageSharp" Version="2.30.16" />
+  </ItemGroup>
+</Project>
