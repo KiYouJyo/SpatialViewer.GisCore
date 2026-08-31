@@ -78,7 +78,15 @@ public sealed class ShapefileDataSourceReader : IGisDataSourceReader
                 $"Shapefile sidecars disagree on record count: SHX={index.Count}, DBF={dbf.RecordCount}.");
         }
 
-        for (var zeroBasedIndex = 0; zeroBasedIndex < index.Count; zeroBasedIndex++)
+        var candidateIndexes = extent is null
+            ? null
+            : await ShapefileSpatialIndex.FindCandidatesAsync(
+                shapeStream,
+                index,
+                extent.Value,
+                cancellationToken).ConfigureAwait(false);
+
+        foreach (var zeroBasedIndex in EnumerateRecordIndexes(index.Count, candidateIndexes))
         {
             cancellationToken.ThrowIfCancellationRequested();
             var indexEntry = index[zeroBasedIndex];
@@ -103,6 +111,24 @@ public sealed class ShapefileDataSourceReader : IGisDataSourceReader
                 geometry,
                 dbfRecord.Attributes,
                 geometry?.DeclaredBounds);
+        }
+    }
+
+    private static IEnumerable<int> EnumerateRecordIndexes(int recordCount, int[]? candidates)
+    {
+        if (candidates is null)
+        {
+            for (var index = 0; index < recordCount; index++)
+            {
+                yield return index;
+            }
+
+            yield break;
+        }
+
+        foreach (var candidate in candidates)
+        {
+            yield return candidate;
         }
     }
 
