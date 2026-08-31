@@ -21,7 +21,7 @@ public sealed class GeoTiffReaderTests
     [Fact]
     public async Task ReadsGeoreferencingBandsNoDataAndOverviewMetadata()
     {
-        var metadata = await _reader.ReadMetadataAsync(GetFixturePath());
+        var metadata = await _reader.ReadMetadataAsync(GetFixturePath("phase3-tiled-overview.tif"));
         var layer = Assert.IsType<RasterLayerMetadata>(Assert.Single(metadata.Layers));
 
         Assert.Equal("geotiff", metadata.SourceKind);
@@ -47,7 +47,7 @@ public sealed class GeoTiffReaderTests
     public async Task ReadsOnlyRequestedTiledWindowIntoTopLeftRgbaOrder()
     {
         var result = await _reader.ReadRasterAsync(
-            GetFixturePath(),
+            GetFixturePath("phase3-tiled-overview.tif"),
             "raster",
             new RasterReadRequest(new RasterWindow(4, 6, 8, 10), 8, 10));
 
@@ -58,10 +58,23 @@ public sealed class GeoTiffReaderTests
     }
 
     [Fact]
+    public async Task ReadsOnlyIntersectingStripsInTopLeftOrder()
+    {
+        var result = await _reader.ReadRasterAsync(
+            GetFixturePath("phase3-strip.tif"),
+            "raster",
+            new RasterReadRequest(new RasterWindow(2, 3, 4, 3), 4, 3));
+
+        Assert.Equal(0, result.OverviewLevel);
+        AssertPixel(result, 0, 0, 20, 60, 40, 255);
+        AssertPixel(result, 3, 2, 50, 100, 80, 255);
+    }
+
+    [Fact]
     public async Task SelectsInternalOverviewForDownsampledViewport()
     {
         var result = await _reader.ReadRasterAsync(
-            GetFixturePath(),
+            GetFixturePath("phase3-tiled-overview.tif"),
             "raster",
             new RasterReadRequest(new RasterWindow(0, 0, 32, 32), 8, 8));
 
@@ -71,11 +84,11 @@ public sealed class GeoTiffReaderTests
         AssertPixel(result, 0, 0, 2, 2, 4, 255);
     }
 
-    private static string GetFixturePath() => Path.Combine(
+    private static string GetFixturePath(string fileName) => Path.Combine(
         AppContext.BaseDirectory,
         "fixtures",
         "geotiff",
-        "phase3-tiled-overview.tif");
+        fileName);
 
     private static void AssertPixel(
         RasterReadResult result,
