@@ -44,6 +44,17 @@ public sealed class GeoTiffReaderTests
     }
 
     [Fact]
+    public async Task PixelIsPointIsNormalizedFromPixelCenterToCornerBounds()
+    {
+        var metadata = await _reader.ReadMetadataAsync(GetFixturePath("pixel-is-point.tif"));
+        var layer = Assert.IsType<RasterLayerMetadata>(Assert.Single(metadata.Layers));
+
+        Assert.Equal(RasterPixelAnchor.Point, layer.PixelAnchor);
+        Assert.Equal(new RasterGeoTransform(95, 10, 0, 205, 0, -10), layer.GeoTransform);
+        Assert.Equal(new Envelope2D(95, 175, 135, 205), layer.Bounds);
+    }
+
+    [Fact]
     public async Task ReadsOnlyRequestedTiledWindowIntoTopLeftRgbaOrder()
     {
         var result = await _reader.ReadRasterAsync(
