@@ -18,6 +18,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialViewer.Gis.Formats.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialViewer.Gis.Rendering.Tests", "tests\SpatialViewer.Gis.Rendering.Tests\SpatialViewer.Gis.Rendering.Tests.csproj", "{80888888-8888-4888-8888-888888888888}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialViewer.Gis.Projections", "src\SpatialViewer.Gis.Projections\SpatialViewer.Gis.Projections.csproj", "{90999999-9999-4999-8999-999999999999}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialViewer.Formats.Gis.Shapefile", "src\SpatialViewer.Formats.Gis.Shapefile\SpatialViewer.Formats.Gis.Shapefile.csproj", "{A1111111-1111-4111-8111-111111111111}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialViewer.Formats.Gis.GeoPackage", "src\SpatialViewer.Formats.Gis.GeoPackage\SpatialViewer.Formats.Gis.GeoPackage.csproj", "{B2222222-2222-4222-8222-222222222222}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,5 +62,17 @@ Global
 		{80888888-8888-4888-8888-888888888888}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80888888-8888-4888-8888-888888888888}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80888888-8888-4888-8888-888888888888}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90999999-9999-4999-8999-999999999999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90999999-9999-4999-8999-999999999999}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90999999-9999-4999-8999-999999999999}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90999999-9999-4999-8999-999999999999}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1111111-1111-4111-8111-111111111111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1111111-1111-4111-8111-111111111111}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1111111-1111-4111-8111-111111111111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1111111-1111-4111-8111-111111111111}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2222222-2222-4222-8222-222222222222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2222222-2222-4222-8222-222222222222}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2222222-2222-4222-8222-222222222222}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2222222-2222-4222-8222-222222222222}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
