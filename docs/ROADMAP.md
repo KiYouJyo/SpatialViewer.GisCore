@@ -49,18 +49,26 @@
 
 ## Phase 3 — 栅格读图（0.3.x）
 
-- GeoTIFF：GeoTransform、CRS、nodata、颜色模型、overview。
-- COG/tiled TIFF 的窗口读取与 mip/overview 选择。
-- PNG/JPEG + world file。
-- Raster tile cache、视口范围请求、取消过期任务。
+**状态：✅ 已完成 managed baseline（2026-08-31）**
 
-**验收条件**：大栅格缩放/平移不整图解码；地理定位与像素范围测试通过。
+- [x] Core 栅格契约：affine `RasterGeoTransform`、pixel window、band/overview metadata、RGBA read result、pixel anchor。
+- [x] GeoTIFF：ModelPixelScale/ModelTiepoint 与 ModelTransformation、GeoKey EPSG、PixelIsArea/PixelIsPoint、nodata、颜色模型、band metadata。
+- [x] tiled TIFF 仅解码与请求窗口相交的 tile；strip TIFF 仅解码与窗口相交的 strip，不先构造整幅 RGBA 图。
+- [x] 内部 TIFF overview 识别与按输出分辨率选择；窗口映射到 overview 后再解码/重采样。
+- [x] 本地 COG-compatible tiled/overview 读取路径建立；HTTP Range/远程 COG 属于 Phase 4 网络数据源，不在本阶段虚报支持。
+- [x] PNG/JPEG + world file（PGW/JGW/长扩展名/WLD）与可选同名 PRJ；world-file 像素中心语义正规化为 Core 像素外框 affine transform。
+- [x] byte-budgeted LRU raster cache、`RasterViewportReader` 与 latest-request cancellation；新视口读取会取消被替代的旧请求。
+- [x] GeoTIFF、WorldImage 项目正式纳入 solution Debug/Release 配置。
+- [x] 合法合成 tiled/overview GeoTIFF、strip GeoTIFF、PNG、JPEG fixture 与地理定位/像素方向/窗口读取回归。
+
+**验收结果**：GeoTIFF 缩放/平移读取走 tile/strip 窗口路径并可利用内部 overview，不要求先解完整原图；地理定位与旋转 affine/world-file 测试通过。PNG/JPEG 由于格式本身不是随机 tile 容器，首次像素请求仍需完整解压缩图像，随后可通过弱引用解码缓存与 raster viewport cache 复用；该限制在兼容矩阵中明确记录。
 
 ## Phase 4 — 瓦片与网络数据源（0.4.x）
 
 - MBTiles、XYZ/TMS。
 - WMS/WMTS；网络请求、缓存、超时、重试与取消全部在 adapter 层。
 - MVT，随后评估 PMTiles。
+- HTTP Range / remote COG 读取与本地 raster window contract 对接。
 - 网络源与本地源共享统一图层接口，但缓存策略分离。
 
 ## Phase 5 — GIS 显示语义（0.5.x）
@@ -74,6 +82,7 @@
 
 - 空间索引、对象池、几何简化、LOD、tile/feature cache。
 - 百万级/更大数据集压力测试、真实内存上限测试与 benchmark。
+- 大型 GeoTIFF/COG 的实际峰值内存、tile cache 命中率与快速拖拽取消压力测试。
 - 与 QGIS/GDAL 的已知样例对照，维护兼容矩阵。
 - 崩溃/损坏文件 fuzz fixtures；所有 reader 错误必须可隔离。
 
