@@ -9,8 +9,12 @@ public enum GisLayerKind
 
 public sealed record GisFeature(
     string? Id,
-    IGisGeometry Geometry,
-    IReadOnlyDictionary<string, object?> Attributes);
+    IGisGeometry? Geometry,
+    IReadOnlyDictionary<string, object?> Attributes,
+    GisBoundingBox? DeclaredBounds = null)
+{
+    public Envelope2D? Bounds => Geometry?.Bounds ?? DeclaredBounds?.XY;
+}
 
 public abstract record GisLayerMetadata(
     string Name,
