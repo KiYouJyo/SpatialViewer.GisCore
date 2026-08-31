@@ -31,13 +31,21 @@
 
 ## Phase 2 — 桌面 GIS 主流矢量格式（0.2.x）
 
-- Shapefile（SHP/SHX/DBF/PRJ/CPG）与编码处理。
-- GeoPackage 矢量表、几何列、属性、空间索引。
-- CRS 服务：EPSG/WKT 解析、显式坐标转换、轴顺序策略。
-- R-tree/分块索引、extent query、流式 feature enumeration。
-- 第三方后端采用独立 adapter；优先评估 GDAL/OGR + PROJ，同时保留 managed reference adapter。
+**状态：✅ 已完成（2026-08-31）**
 
-**验收条件**：百万级要素不会被强制一次性物化；Shapefile/GPKG 坐标与属性可回归验证。
+- [x] Shapefile：SHP/SHX/DBF/PRJ/CPG 组合读取，DBF 编码处理，缺失 PRJ 保持 `Unknown`。
+- [x] Shapefile Point/MultiPoint/PolyLine/Polygon 的 2D/Z/M 语义读取；Z/M 不静默丢失。
+- [x] GeoPackage 矢量表、几何列、属性、nullable geometry、GeoPackageBinary/WKB、SRS_ID 与文件内 RTree 范围查询。
+- [x] CRS 基线：WKT1/WKT2 中 EPSG authority 识别，未知 WKT 原样保留；显式 EPSG:4326 ↔ EPSG:3857 坐标转换。
+- [x] 轴顺序作为显式 transform policy；坐标转换保留 Z/M，越界和不支持的 EPSG 对明确报错。
+- [x] Core 提供 backend-neutral immutable packed R-tree；Shapefile extent query 先读取轻量记录 bbox 建候选集，再完整解析候选 geometry/DBF。
+- [x] Reader 继续使用 `IAsyncEnumerable<GisFeature>` 流式枚举，不要求把完整图层强制物化为 Feature 列表。
+- [x] Projections / Shapefile / GeoPackage 已正式纳入 solution 的 Debug/Release 构建配置。
+- [x] 当前保持 managed reference implementation；第三方实现必须继续隔离在 adapter/service 层。
+
+**验收结果**：Shapefile 与 GeoPackage 均已有合法合成数据回归，坐标/属性/Z/M/CRS/extent query 可验证；Shapefile 空间索引仅保存 bbox 与记录引用，GeoPackage 优先复用文件内 RTree，因此范围读取不需要先构造全部 `GisFeature`。百万级真实数据集的时间、峰值内存和缓存 benchmark 仍属于 Phase 6 的性能收敛任务，不在此处虚报测试结果。
+
+**后续扩展**：GDAL/OGR + PROJ 可作为更广格式/CRS 覆盖的可选 backend 引入，但不得替换或污染当前稳定公共契约。
 
 ## Phase 3 — 栅格读图（0.3.x）
 
@@ -65,7 +73,7 @@
 ## Phase 6 — 性能与兼容性收敛（0.6–0.9）
 
 - 空间索引、对象池、几何简化、LOD、tile/feature cache。
-- 大数据压力测试与内存上限测试。
+- 百万级/更大数据集压力测试、真实内存上限测试与 benchmark。
 - 与 QGIS/GDAL 的已知样例对照，维护兼容矩阵。
 - 崩溃/损坏文件 fuzz fixtures；所有 reader 错误必须可隔离。
 
