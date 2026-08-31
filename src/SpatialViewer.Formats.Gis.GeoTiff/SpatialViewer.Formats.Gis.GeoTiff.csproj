@@ -4,4 +4,7 @@
     <ProjectReference Include="..\SpatialViewer.Formats.Gis\SpatialViewer.Formats.Gis.csproj" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.660" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="SpatialViewer.Formats.Gis.RemoteCog" />
+  </ItemGroup>
 </Project>
