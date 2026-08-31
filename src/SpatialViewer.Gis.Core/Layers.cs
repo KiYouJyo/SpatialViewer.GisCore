@@ -37,4 +37,17 @@ public sealed record RasterLayerMetadata(
     int Width,
     int Height,
     int BandCount)
-    : GisLayerMetadata(Name, GisLayerKind.Raster, SpatialReference, Bounds);
+    : GisLayerMetadata(Name, GisLayerKind.Raster, SpatialReference, Bounds)
+{
+    public RasterGeoTransform? GeoTransform { get; init; }
+
+    public RasterPixelAnchor PixelAnchor { get; init; } = RasterPixelAnchor.Area;
+
+    public IReadOnlyList<RasterBandMetadata> Bands { get; init; } = Array.Empty<RasterBandMetadata>();
+
+    public IReadOnlyList<RasterOverviewMetadata> Overviews { get; init; } = Array.Empty<RasterOverviewMetadata>();
+
+    public string? ColorModel { get; init; }
+
+    public bool IsTiled { get; init; }
+}

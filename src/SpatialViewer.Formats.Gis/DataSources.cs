@@ -24,3 +24,18 @@ public interface IGisDataSourceReader
         Envelope2D? extent = null,
         CancellationToken cancellationToken = default);
 }
+
+public interface IRasterDataSourceReader
+{
+    string FormatId { get; }
+
+    ValueTask<GisDatasetMetadata> ReadMetadataAsync(
+        string path,
+        CancellationToken cancellationToken = default);
+
+    ValueTask<RasterReadResult> ReadRasterAsync(
+        string path,
+        string layerName,
+        RasterReadRequest request,
+        CancellationToken cancellationToken = default);
+}
