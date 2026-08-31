@@ -1,0 +1,85 @@
+{
+  "type": "FeatureCollection",
+  "bbox": [-10, -10, 30, 30],
+  "features": [
+    {
+      "type": "Feature",
+      "id": 42,
+      "bbox": [1, 2, 1, 2],
+      "geometry": { "type": "Point", "coordinates": [1, 2, 3] },
+      "properties": {
+        "name": "point",
+        "active": true,
+        "count": 2,
+        "ratio": 1.5,
+        "nullable": null,
+        "tags": ["a", 3],
+        "meta": { "zone": "A" }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "mp",
+      "geometry": { "type": "MultiPoint", "coordinates": [[0, 0], [2, 2]] },
+      "properties": {}
+    },
+    {
+      "type": "Feature",
+      "id": "line",
+      "geometry": { "type": "LineString", "coordinates": [[-2, -2], [3, 3]] },
+      "properties": { "kind": "line" }
+    },
+    {
+      "type": "Feature",
+      "id": "ml",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [[[10, 10], [11, 11]], [[12, 12], [13, 13]]]
+      },
+      "properties": {}
+    },
+    {
+      "type": "Feature",
+      "id": "poly",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [[0, 0], [4, 0], [4, 4], [0, 4], [0, 0]],
+          [[1, 1], [1, 2], [2, 2], [1, 1]]
+        ]
+      },
+      "properties": {}
+    },
+    {
+      "type": "Feature",
+      "id": "mpoly",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [[[20, 20], [22, 20], [22, 22], [20, 22], [20, 20]]],
+          [[[24, 24], [26, 24], [26, 26], [24, 26], [24, 24]]]
+        ]
+      },
+      "properties": {}
+    },
+    {
+      "type": "Feature",
+      "id": "gc",
+      "geometry": {
+        "type": "GeometryCollection",
+        "bbox": [-5, -5, 30, 30],
+        "geometries": [
+          { "type": "Point", "coordinates": [-5, -5] },
+          { "type": "LineString", "coordinates": [[28, 28], [30, 30]] }
+        ]
+      },
+      "properties": { "kind": "collection" }
+    },
+    {
+      "type": "Feature",
+      "id": "null-geometry",
+      "geometry": null,
+      "properties": null
+    }
+  ]
+}

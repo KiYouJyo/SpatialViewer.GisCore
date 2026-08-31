@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\SpatialViewer.Gis.Core\SpatialViewer.Gis.Core.csproj" />
+    <ProjectReference Include="..\SpatialViewer.Formats.Gis\SpatialViewer.Formats.Gis.csproj" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.11" />
+  </ItemGroup>
+</Project>
