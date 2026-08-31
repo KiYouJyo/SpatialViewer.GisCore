@@ -1,6 +1,6 @@
 namespace SpatialViewer.Gis.Core;
 
-public readonly record struct GisCoordinate(double X, double Y, double? Z = null);
+public readonly record struct GisCoordinate(double X, double Y, double? Z = null, double? M = null);
 
 public readonly record struct Envelope2D(double MinX, double MinY, double MaxX, double MaxY)
 {
