@@ -117,7 +117,8 @@ public sealed class GeoPackageReaderTests
         var path = await CreateFixtureAsync();
         try
         {
-            await using (var connection = new SqliteConnection($"Data Source={path}"))
+            await using (var connection = new SqliteConnection(
+                CreateConnectionString(path, SqliteOpenMode.ReadWrite)))
             {
                 await connection.OpenAsync();
                 await using var command = connection.CreateCommand();
@@ -152,7 +153,8 @@ public sealed class GeoPackageReaderTests
     private static async Task<string> CreateFixtureAsync()
     {
         var path = Path.Combine(Path.GetTempPath(), $"SpatialViewer-GisCore-{Guid.NewGuid():N}.gpkg");
-        await using var connection = new SqliteConnection($"Data Source={path}");
+        await using var connection = new SqliteConnection(
+            CreateConnectionString(path, SqliteOpenMode.ReadWriteCreate));
         await connection.OpenAsync();
 
         await ExecuteAsync(
@@ -252,6 +254,15 @@ public sealed class GeoPackageReaderTests
 
         return path;
     }
+
+    private static string CreateConnectionString(string path, SqliteOpenMode mode) =>
+        new SqliteConnectionStringBuilder
+        {
+            DataSource = path,
+            Mode = mode,
+            Cache = SqliteCacheMode.Private,
+            Pooling = false,
+        }.ToString();
 
     private static async Task InsertPlaceAsync(
         SqliteConnection connection,
