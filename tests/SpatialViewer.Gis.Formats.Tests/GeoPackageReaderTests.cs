@@ -288,14 +288,14 @@ public sealed class GeoPackageReaderTests
         return stream.ToArray();
     }
 
-    private static byte[] CreateLineStringBlob(IReadOnlyList<GisCoordinate> coordinates)
+    private static byte[] CreateLineStringBlob(GisCoordinate[] coordinates)
     {
         using var stream = new MemoryStream();
         using var writer = new BinaryWriter(stream);
         WriteGeoPackageHeader(writer, coordinates);
         writer.Write((byte)1);
         writer.Write(3002u);
-        writer.Write(checked((uint)coordinates.Count));
+        writer.Write(checked((uint)coordinates.Length));
 
         foreach (var coordinate in coordinates)
         {
@@ -307,7 +307,7 @@ public sealed class GeoPackageReaderTests
 
     private static void WriteGeoPackageHeader(
         BinaryWriter writer,
-        IReadOnlyList<GisCoordinate> coordinates)
+        GisCoordinate[] coordinates)
     {
         writer.Write((byte)'G');
         writer.Write((byte)'P');
