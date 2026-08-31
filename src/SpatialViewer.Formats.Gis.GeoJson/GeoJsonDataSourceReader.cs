@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using SpatialViewer.Formats.Gis;
@@ -265,7 +264,7 @@ public sealed class GeoJsonDataSourceReader : IGisDataSourceReader
         return coordinates;
     }
 
-    private static IReadOnlyList<IGisGeometry> ParseGeometryCollection(
+    private static List<IGisGeometry> ParseGeometryCollection(
         JsonElement geometry,
         string context)
     {
@@ -317,7 +316,7 @@ public sealed class GeoJsonDataSourceReader : IGisDataSourceReader
         return new GisCoordinate(x, y, z);
     }
 
-    private static IReadOnlyList<GisCoordinate> ParsePositions(JsonElement coordinates, string context)
+    private static List<GisCoordinate> ParsePositions(JsonElement coordinates, string context)
     {
         var result = new List<GisCoordinate>(coordinates.GetArrayLength());
         var index = 0;
@@ -331,7 +330,7 @@ public sealed class GeoJsonDataSourceReader : IGisDataSourceReader
         return result;
     }
 
-    private static IReadOnlyList<GisCoordinate> ParseLineString(JsonElement coordinates, string context)
+    private static List<GisCoordinate> ParseLineString(JsonElement coordinates, string context)
     {
         var result = ParsePositions(coordinates, context);
         if (result.Count != 0 && result.Count < 2)
@@ -342,7 +341,7 @@ public sealed class GeoJsonDataSourceReader : IGisDataSourceReader
         return result;
     }
 
-    private static IReadOnlyList<IReadOnlyList<GisCoordinate>> ParseMultiLineString(
+    private static List<IReadOnlyList<GisCoordinate>> ParseMultiLineString(
         JsonElement coordinates,
         string context)
     {
@@ -363,7 +362,7 @@ public sealed class GeoJsonDataSourceReader : IGisDataSourceReader
         return result;
     }
 
-    private static IReadOnlyList<IReadOnlyList<GisCoordinate>> ParsePolygon(
+    private static List<IReadOnlyList<GisCoordinate>> ParsePolygon(
         JsonElement coordinates,
         string context)
     {
@@ -386,7 +385,7 @@ public sealed class GeoJsonDataSourceReader : IGisDataSourceReader
         return rings;
     }
 
-    private static IReadOnlyList<IReadOnlyList<IReadOnlyList<GisCoordinate>>> ParseMultiPolygon(
+    private static List<IReadOnlyList<IReadOnlyList<GisCoordinate>>> ParseMultiPolygon(
         JsonElement coordinates,
         string context)
     {
@@ -427,7 +426,7 @@ public sealed class GeoJsonDataSourceReader : IGisDataSourceReader
         }
     }
 
-    private static IReadOnlyDictionary<string, object?> ParseProperties(
+    private static Dictionary<string, object?> ParseProperties(
         JsonElement properties,
         string context)
     {
@@ -476,7 +475,7 @@ public sealed class GeoJsonDataSourceReader : IGisDataSourceReader
         return ParseFiniteNumber(value, context);
     }
 
-    private static IReadOnlyList<object?> ParsePropertyArray(JsonElement value, string context)
+    private static List<object?> ParsePropertyArray(JsonElement value, string context)
     {
         var result = new List<object?>(value.GetArrayLength());
         var index = 0;
