@@ -123,8 +123,11 @@ public sealed class GeoTiffDataSourceReader : IRasterDataSourceReader
                 clippedWindow));
     }
 
-    private static Tiff OpenTiff(string path) =>
-        Tiff.Open(path, "r") ?? throw new InvalidDataException($"Unable to open TIFF file '{path}'.");
+    private static Tiff OpenTiff(string path)
+    {
+        GeoTiffTagRegistry.EnsureInitialized();
+        return Tiff.Open(path, "r") ?? throw new InvalidDataException($"Unable to open TIFF file '{path}'.");
+    }
 
     private static List<TiffDirectoryDescriptor> ReadDirectories(
         Tiff tiff,
