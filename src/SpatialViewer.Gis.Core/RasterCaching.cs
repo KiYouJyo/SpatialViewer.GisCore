@@ -18,11 +18,7 @@ public sealed class RasterTileCache
 
     public RasterTileCache(long maximumBytes)
     {
-        if (maximumBytes <= 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(maximumBytes));
-        }
-
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maximumBytes);
         _maximumBytes = maximumBytes;
     }
 
@@ -195,15 +191,8 @@ public static class RasterOverviewSelector
             throw new ArgumentException("Raster source window must be valid.", nameof(sourceWindow));
         }
 
-        if (outputWidth <= 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(outputWidth));
-        }
-
-        if (outputHeight <= 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(outputHeight));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(outputWidth);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(outputHeight);
 
         var targetDecimation = Math.Max(
             (double)sourceWindow.Width / outputWidth,
