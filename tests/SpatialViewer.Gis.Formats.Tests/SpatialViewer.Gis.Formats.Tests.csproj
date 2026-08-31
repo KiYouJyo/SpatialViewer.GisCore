@@ -4,6 +4,7 @@
     <ProjectReference Include="..\..\src\SpatialViewer.Formats.Gis.GeoJson\SpatialViewer.Formats.Gis.GeoJson.csproj" />
     <ProjectReference Include="..\..\src\SpatialViewer.Formats.Gis.GeoPackage\SpatialViewer.Formats.Gis.GeoPackage.csproj" />
     <ProjectReference Include="..\..\src\SpatialViewer.Formats.Gis.GeoTiff\SpatialViewer.Formats.Gis.GeoTiff.csproj" />
+    <ProjectReference Include="..\..\src\SpatialViewer.Formats.Gis.MbTiles\SpatialViewer.Formats.Gis.MbTiles.csproj" />
     <ProjectReference Include="..\..\src\SpatialViewer.Formats.Gis.Shapefile\SpatialViewer.Formats.Gis.Shapefile.csproj" />
     <ProjectReference Include="..\..\src\SpatialViewer.Formats.Gis.WorldImage\SpatialViewer.Formats.Gis.WorldImage.csproj" />
     <ProjectReference Include="..\..\src\SpatialViewer.Gis.Projections\SpatialViewer.Gis.Projections.csproj" />
