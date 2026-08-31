@@ -22,11 +22,6 @@ internal static class GeoTiffTagRegistry
 
     internal static void EnsureInitialized()
     {
-        if (_initialized)
-        {
-            return;
-        }
-
         lock (InitializationLock)
         {
             if (_initialized)
