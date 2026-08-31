@@ -89,15 +89,8 @@ public readonly record struct RasterGeoTransform(
 
     public Envelope2D GetBounds(int width, int height)
     {
-        if (width <= 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(width));
-        }
-
-        if (height <= 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(height));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(width);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(height);
 
         var topLeft = PixelToWorld(0, 0);
         var topRight = PixelToWorld(width, 0);
@@ -134,15 +127,8 @@ public sealed class RasterReadRequest
             throw new ArgumentException("Raster read window must be valid.", nameof(window));
         }
 
-        if (outputWidth <= 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(outputWidth));
-        }
-
-        if (outputHeight <= 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(outputHeight));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(outputWidth);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(outputHeight);
 
         Window = window;
         OutputWidth = outputWidth;
@@ -166,15 +152,8 @@ public sealed class RasterReadResult
         int overviewLevel,
         RasterWindow sourceWindow)
     {
-        if (width <= 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(width));
-        }
-
-        if (height <= 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(height));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(width);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(height);
 
         var expectedLength = checked(width * height * GetBytesPerPixel(pixelFormat));
         if (pixels.Length != expectedLength)
