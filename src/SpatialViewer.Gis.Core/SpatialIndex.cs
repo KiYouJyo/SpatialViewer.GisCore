@@ -11,15 +11,7 @@ public sealed class PackedRTree<T>
     private const int DefaultNodeCapacity = 16;
     private readonly Node? _root;
 
-    private PackedRTree(Node? root, int count)
-    {
-        _root = root;
-        Count = count;
-    }
-
-    public int Count { get; }
-
-    public static PackedRTree<T> Build(
+    public PackedRTree(
         IReadOnlyList<SpatialIndexEntry<T>> entries,
         int nodeCapacity = DefaultNodeCapacity)
     {
@@ -33,9 +25,10 @@ public sealed class PackedRTree<T>
                 "Packed R-tree node capacity must be at least four.");
         }
 
+        Count = entries.Count;
         if (entries.Count == 0)
         {
-            return new PackedRTree<T>(null, 0);
+            return;
         }
 
         var leafEntries = new SpatialIndexEntry<T>[entries.Count];
@@ -60,8 +53,10 @@ public sealed class PackedRTree<T>
             nodes = BuildParentLevel(nodes, nodeCapacity);
         }
 
-        return new PackedRTree<T>(nodes[0], entries.Count);
+        _root = nodes[0];
     }
+
+    public int Count { get; }
 
     public IReadOnlyList<T> Query(Envelope2D extent)
     {
