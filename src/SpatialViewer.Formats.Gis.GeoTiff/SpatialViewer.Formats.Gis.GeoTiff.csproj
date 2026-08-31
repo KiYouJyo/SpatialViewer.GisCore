@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\SpatialViewer.Gis.Core\SpatialViewer.Gis.Core.csproj" />
+    <ProjectReference Include="..\SpatialViewer.Formats.Gis\SpatialViewer.Formats.Gis.csproj" />
+    <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.660" />
+  </ItemGroup>
+</Project>
