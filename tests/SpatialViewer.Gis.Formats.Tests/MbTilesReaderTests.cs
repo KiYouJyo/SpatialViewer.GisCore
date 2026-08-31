@@ -26,7 +26,7 @@ public sealed class MbTilesReaderTests
         try
         {
             var png = new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
-            await CreateMbTilesAsync(path, "png", 1, 1, 1, 0, png);
+            await CreateMbTilesAsync(path, "png", 1, 1, 0, 1, png);
 
             var metadata = await _reader.ReadMetadataAsync(path);
             Assert.Equal("Synthetic tiles", metadata.Name);
