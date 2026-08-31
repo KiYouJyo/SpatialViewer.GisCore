@@ -1,5 +1,6 @@
 using SpatialViewer.Gis.Core;
 using SpatialViewer.Gis.Rendering;
+using Xunit;
 
 namespace SpatialViewer.Gis.Rendering.Tests;
 

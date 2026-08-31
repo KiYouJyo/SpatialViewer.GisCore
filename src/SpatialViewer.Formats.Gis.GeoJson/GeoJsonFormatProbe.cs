@@ -1,3 +1,5 @@
+using SpatialViewer.Formats.Gis;
+
 namespace SpatialViewer.Formats.Gis.GeoJson;
 
 public sealed class GeoJsonFormatProbe : IGisFormatProbe

@@ -1,4 +1,5 @@
 using SpatialViewer.Gis.Core;
+using Xunit;
 
 namespace SpatialViewer.Gis.Core.Tests;
 

@@ -1,4 +1,5 @@
 using SpatialViewer.Formats.Gis.GeoJson;
+using Xunit;
 
 namespace SpatialViewer.Gis.Formats.Tests;
 
