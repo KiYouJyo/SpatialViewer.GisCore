@@ -119,7 +119,8 @@ public sealed class GeoPackageDataSourceReader : IGisDataSourceReader
         {
             DataSource = path,
             Mode = SqliteOpenMode.ReadOnly,
-            Cache = SqliteCacheMode.Shared,
+            Cache = SqliteCacheMode.Private,
+            Pooling = false,
         }.ToString();
 
         var connection = new SqliteConnection(connectionString);
