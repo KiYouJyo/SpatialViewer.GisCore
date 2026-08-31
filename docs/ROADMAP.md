@@ -16,12 +16,18 @@
 
 ## Phase 1 — 首条端到端矢量链路（0.1.0）
 
-- 完整 GeoJSON：Point/MultiPoint/LineString/MultiLineString/Polygon/MultiPolygon/GeometryCollection。
-- 属性类型、空值、Feature ID、bbox、CRS 缺失行为。
-- 矢量图层范围计算、基本空间过滤、RenderFrame 转换。
-- 建立小型/畸形/大文件 fixture 与回归测试。
+**状态：✅ 已完成（2026-08-31）**
 
-**验收条件**：GeoJSON 从读取到显示链路闭环；错误文件可诊断；不静默修正坐标。
+- [x] 完整 GeoJSON：Point/MultiPoint/LineString/MultiLineString/Polygon/MultiPolygon/GeometryCollection。
+- [x] 属性类型、空值、Feature ID、bbox、Z、CRS 缺失行为。
+- [x] 支持 FeatureCollection、单 Feature 与直接 Geometry 顶层对象。
+- [x] 矢量图层范围计算、基本空间过滤、RenderFrame 转换。
+- [x] Multi* / GeometryCollection 转换为稳定的 Point / Polyline / Polygon 渲染 primitive。
+- [x] 建立小型/畸形 fixture 与运行时生成的 4096-feature 压力回归。
+- [x] 缺失 CRS 保持 `Unknown`；仅保留文件显式声明的 legacy named CRS，不隐式假定 EPSG:4326。
+- [x] 未闭合 Polygon 与额外坐标维度直接诊断，不静默修正或丢弃。
+
+**验收结果**：GeoJSON 从 Reader → GIS semantic model → extent query → RenderFrame 的端到端链路已闭环；Debug/Release build 与 Release tests 通过严格 analyzer/CI 验证。
 
 ## Phase 2 — 桌面 GIS 主流矢量格式（0.2.x）
 
