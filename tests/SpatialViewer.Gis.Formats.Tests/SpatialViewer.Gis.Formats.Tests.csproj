@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\SpatialViewer.Formats.Gis.GeoJson\SpatialViewer.Formats.Gis.GeoJson.csproj" />
     <ProjectReference Include="..\..\src\SpatialViewer.Formats.Gis.GeoPackage\SpatialViewer.Formats.Gis.GeoPackage.csproj" />
+    <ProjectReference Include="..\..\src\SpatialViewer.Formats.Gis.GeoTiff\SpatialViewer.Formats.Gis.GeoTiff.csproj" />
     <ProjectReference Include="..\..\src\SpatialViewer.Formats.Gis.Shapefile\SpatialViewer.Formats.Gis.Shapefile.csproj" />
     <ProjectReference Include="..\..\src\SpatialViewer.Gis.Projections\SpatialViewer.Gis.Projections.csproj" />
     <ProjectReference Include="..\..\src\SpatialViewer.Gis.Rendering\SpatialViewer.Gis.Rendering.csproj" />
@@ -13,6 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\fixtures\geojson\**\*" Link="fixtures\geojson\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\fixtures\geotiff\**\*" Link="fixtures\geotiff\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\fixtures\shapefile\**\*" Link="fixtures\shapefile\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
