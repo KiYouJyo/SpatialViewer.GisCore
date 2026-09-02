@@ -14,7 +14,7 @@ public sealed record MvtDecodedTile(
     TileCoordinate Coordinate,
     IReadOnlyList<MvtDecodedLayer> Layers)
 {
-    public SpatialReference TileSpatialReference => SpatialReference.FromEpsg(3857);
+    public static SpatialReference TileSpatialReference => SpatialReference.FromEpsg(3857);
 }
 
 public static class MvtTileDecoder
@@ -112,8 +112,8 @@ public static class MvtTileDecoder
 
     private static GisFeature ParseFeature(
         ReadOnlyMemory<byte> payload,
-        IReadOnlyList<string> keys,
-        IReadOnlyList<object?> values,
+        List<string> keys,
+        List<object?> values,
         int extent,
         TileCoordinate coordinate,
         string layerName)
@@ -238,7 +238,7 @@ public static class MvtTileDecoder
     }
 
     private static IGisGeometry DecodePointGeometry(
-        IReadOnlyList<uint> commands,
+        List<uint> commands,
         int extent,
         TileCoordinate coordinate,
         string layerName)
@@ -276,7 +276,7 @@ public static class MvtTileDecoder
     }
 
     private static IGisGeometry DecodeLineGeometry(
-        IReadOnlyList<uint> commands,
+        List<uint> commands,
         int extent,
         TileCoordinate coordinate,
         string layerName)
@@ -351,7 +351,7 @@ public static class MvtTileDecoder
     }
 
     private static IGisGeometry DecodePolygonGeometry(
-        IReadOnlyList<uint> commands,
+        List<uint> commands,
         int extent,
         TileCoordinate coordinate,
         string layerName)
@@ -472,7 +472,7 @@ public static class MvtTileDecoder
     }
 
     private static void ReadDelta(
-        IReadOnlyList<uint> commands,
+        List<uint> commands,
         ref int index,
         ref long x,
         ref long y,
@@ -515,7 +515,7 @@ public static class MvtTileDecoder
 
     private static void ReadPackedUInt32(
         ReadOnlyMemory<byte> payload,
-        ICollection<uint> destination,
+        List<uint> destination,
         string context)
     {
         var reader = new ProtoReader(payload);
