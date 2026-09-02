@@ -8,6 +8,8 @@ namespace SpatialViewer.Gis.Formats.Tests;
 
 public sealed class MvtDecoderTests
 {
+    private static readonly string[] NameKeys = ["name"];
+
     [Fact]
     public void DecodesPointLinePolygonAttributesAndIdsIntoWebMercator()
     {
@@ -15,7 +17,7 @@ public sealed class MvtDecoderTests
         var payload = CreateTile(
             "places",
             4096,
-            new[] { "name" },
+            NameKeys,
             new[] { CreateStringValue("center") },
             new[]
             {
@@ -98,7 +100,7 @@ public sealed class MvtDecoderTests
         var payload = CreateTile(
             "broken",
             4096,
-            new[] { "name" },
+            NameKeys,
             new[] { CreateStringValue("value") },
             new[]
             {
@@ -148,13 +150,13 @@ public sealed class MvtDecoderTests
 
     private static byte[] CreateFeature(
         ulong id,
-        IReadOnlyList<uint> tags,
+        uint[] tags,
         uint geometryType,
         IReadOnlyList<uint> geometry)
     {
         var feature = new List<byte>();
         WriteVarintField(feature, 1, id);
-        if (tags.Count > 0)
+        if (tags.Length > 0)
         {
             WritePackedUInt32(feature, 2, tags);
         }
