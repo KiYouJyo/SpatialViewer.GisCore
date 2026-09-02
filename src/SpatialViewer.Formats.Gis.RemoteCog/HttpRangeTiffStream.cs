@@ -22,7 +22,7 @@ internal sealed class HttpRangeTiffStream : TiffStream
     public HttpRangeTiffStream(
         HttpClient httpClient,
         Uri uri,
-        CancellationToken cancellationToken,
+        RequestCancellation cancellation,
         TimeSpan requestTimeout,
         int blockSize,
         int maximumCachedBlocks)
@@ -34,17 +34,13 @@ internal sealed class HttpRangeTiffStream : TiffStream
             throw new ArgumentException("Remote COG URI must use HTTP or HTTPS.", nameof(uri));
         }
 
-        if (requestTimeout <= TimeSpan.Zero)
-        {
-            throw new ArgumentOutOfRangeException(nameof(requestTimeout));
-        }
-
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(requestTimeout, TimeSpan.Zero);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(blockSize);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maximumCachedBlocks);
 
         _httpClient = httpClient;
         _uri = uri;
-        _cancellationToken = cancellationToken;
+        _cancellationToken = cancellation.Token;
         _requestTimeout = requestTimeout;
         _blockSize = blockSize;
         _maximumCachedBlocks = maximumCachedBlocks;
@@ -247,4 +243,9 @@ internal sealed class HttpRangeTiffStream : TiffStream
     private void ThrowIfClosed() => ObjectDisposedException.ThrowIf(_closed, this);
 
     private sealed record CacheEntry(long BlockIndex, byte[] Content);
+}
+
+internal readonly record struct RequestCancellation(CancellationToken Token)
+{
+    public static implicit operator RequestCancellation(CancellationToken token) => new(token);
 }
