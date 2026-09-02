@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialViewer.Formats.Gis.R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialViewer.Formats.Gis.WebMap", "src\SpatialViewer.Formats.Gis.WebMap\SpatialViewer.Formats.Gis.WebMap.csproj", "{B8888888-8888-4888-8888-888888888880}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialViewer.Formats.Gis.Mvt", "src\SpatialViewer.Formats.Gis.Mvt\SpatialViewer.Formats.Gis.Mvt.csproj", "{C9999999-9999-4999-8999-999999999990}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -110,5 +112,9 @@ Global
 		{B8888888-8888-4888-8888-888888888880}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8888888-8888-4888-8888-888888888880}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8888888-8888-4888-8888-888888888880}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9999999-9999-4999-8999-999999999990}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9999999-9999-4999-8999-999999999990}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9999999-9999-4999-8999-999999999990}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9999999-9999-4999-8999-999999999990}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
