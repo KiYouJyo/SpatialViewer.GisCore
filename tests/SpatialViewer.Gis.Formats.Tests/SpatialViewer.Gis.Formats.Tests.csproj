@@ -6,6 +6,7 @@
     <ProjectReference Include="..\..\src\SpatialViewer.Formats.Gis.GeoTiff\SpatialViewer.Formats.Gis.GeoTiff.csproj" />
     <ProjectReference Include="..\..\src\SpatialViewer.Formats.Gis.MbTiles\SpatialViewer.Formats.Gis.MbTiles.csproj" />
     <ProjectReference Include="..\..\src\SpatialViewer.Formats.Gis.Mvt\SpatialViewer.Formats.Gis.Mvt.csproj" />
+    <ProjectReference Include="..\..\src\SpatialViewer.Formats.Gis.PmTiles\SpatialViewer.Formats.Gis.PmTiles.csproj" />
     <ProjectReference Include="..\..\src\SpatialViewer.Formats.Gis.RemoteCog\SpatialViewer.Formats.Gis.RemoteCog.csproj" />
     <ProjectReference Include="..\..\src\SpatialViewer.Formats.Gis.Shapefile\SpatialViewer.Formats.Gis.Shapefile.csproj" />
     <ProjectReference Include="..\..\src\SpatialViewer.Formats.Gis.WebMap\SpatialViewer.Formats.Gis.WebMap.csproj" />
