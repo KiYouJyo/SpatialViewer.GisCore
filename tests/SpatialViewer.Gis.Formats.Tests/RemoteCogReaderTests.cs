@@ -140,7 +140,17 @@ public sealed class RemoteCogReaderTests
 
         public IReadOnlyList<CapturedRequest> Requests => _requests;
 
+        protected override HttpResponseMessage Send(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken) =>
+            CreateResponse(request, cancellationToken);
+
         protected override Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken) =>
+            Task.FromResult(CreateResponse(request, cancellationToken));
+
+        private HttpResponseMessage CreateResponse(
             HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
@@ -154,12 +164,11 @@ public sealed class RemoteCogReaderTests
 
             if (!_requireRange)
             {
-                var fullResponse = new HttpResponseMessage(HttpStatusCode.OK)
+                RecordResponseBytes(_source.Length);
+                return new HttpResponseMessage(HttpStatusCode.OK)
                 {
                     Content = new ByteArrayContent(_source),
                 };
-                RecordResponseBytes(_source.Length);
-                return Task.FromResult(fullResponse);
             }
 
             if (range?.From is null)
@@ -170,7 +179,7 @@ public sealed class RemoteCogReaderTests
             var start = range.From.Value;
             if (start >= _source.LongLength)
             {
-                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.RequestedRangeNotSatisfiable));
+                return new HttpResponseMessage(HttpStatusCode.RequestedRangeNotSatisfiable);
             }
 
             var requestedEnd = range.To ?? (_source.LongLength - 1);
@@ -184,7 +193,7 @@ public sealed class RemoteCogReaderTests
             };
             response.Content.Headers.ContentRange = new ContentRangeHeaderValue(start, end, _source.LongLength);
             RecordResponseBytes(length);
-            return Task.FromResult(response);
+            return response;
         }
 
         private void RecordResponseBytes(int length)
