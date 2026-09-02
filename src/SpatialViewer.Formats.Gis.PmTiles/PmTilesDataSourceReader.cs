@@ -68,7 +68,7 @@ public sealed class PmTilesDataSourceReader : ITileDataSourceReader, IDisposable
         ObjectDisposedException.ThrowIf(_disposed, this);
         await using var byteSource = CreateSource(source);
         var header = await ReadHeaderAsync(byteSource, cancellationToken).ConfigureAwait(false);
-        var metadata = await ReadJsonMetadataAsync(byteSource, header, cancellationToken).ConfigureAwait(false);
+        using var metadata = await ReadJsonMetadataAsync(byteSource, header, cancellationToken).ConfigureAwait(false);
         var name = TryGetString(metadata, "name") ?? GetDisplayName(source);
         var result = new TileSourceMetadata(
             name,
@@ -535,7 +535,20 @@ internal static class PmTilesTileId
 
 internal interface IPmTilesByteSource : IAsyncDisposable
 {
-    ValueTask<byte[]> GetBytesAsync(long offset, int length, CancellationToken cancellationToken);
+    ValueTask<byte[]> GetBytesAsync(ulong offset, int length, CancellationToken cancellationToken);
+}
+
+internal static class PmTilesOffset
+{
+    public static long ToInt64(ulong offset, string description)
+    {
+        if (offset > long.MaxValue)
+        {
+            throw new InvalidDataException($"{description} {offset} exceeds the managed Int64 stream offset limit.");
+        }
+
+        return checked((long)offset);
+    }
 }
 
 internal sealed class FilePmTilesByteSource : IPmTilesByteSource
@@ -548,17 +561,17 @@ internal sealed class FilePmTilesByteSource : IPmTilesByteSource
         _stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.Asynchronous | FileOptions.RandomAccess);
     }
 
-    public async ValueTask<byte[]> GetBytesAsync(long offset, int length, CancellationToken cancellationToken)
+    public async ValueTask<byte[]> GetBytesAsync(ulong offset, int length, CancellationToken cancellationToken)
     {
-        ArgumentOutOfRangeException.ThrowIfNegative(offset);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(length);
-        if (offset > _stream.Length - length)
+        var signedOffset = PmTilesOffset.ToInt64(offset, "PMTiles file offset");
+        if (signedOffset > _stream.Length - length)
         {
-            throw new InvalidDataException($"PMTiles byte range {offset}-{offset + length - 1} exceeds the archive length {_stream.Length}.");
+            throw new InvalidDataException($"PMTiles byte range {signedOffset}-{signedOffset + length - 1} exceeds the archive length {_stream.Length}.");
         }
 
         var buffer = new byte[length];
-        _stream.Position = offset;
+        _stream.Position = signedOffset;
         await _stream.ReadExactlyAsync(buffer, cancellationToken).ConfigureAwait(false);
         return buffer;
     }
@@ -582,14 +595,15 @@ internal sealed class HttpPmTilesByteSource : IPmTilesByteSource
         _requestTimeout = requestTimeout;
     }
 
-    public async ValueTask<byte[]> GetBytesAsync(long offset, int length, CancellationToken cancellationToken)
+    public async ValueTask<byte[]> GetBytesAsync(ulong offset, int length, CancellationToken cancellationToken)
     {
-        ArgumentOutOfRangeException.ThrowIfNegative(offset);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(length);
+        var signedOffset = PmTilesOffset.ToInt64(offset, "PMTiles HTTP range offset");
         using var timeoutSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         timeoutSource.CancelAfter(_requestTimeout);
         using var request = new HttpRequestMessage(HttpMethod.Get, _uri);
-        request.Headers.Range = new RangeHeaderValue(offset, checked(offset + length - 1L));
+        var end = checked(signedOffset + length - 1L);
+        request.Headers.Range = new RangeHeaderValue(signedOffset, end);
         request.Headers.UserAgent.Add(new ProductInfoHeaderValue("SpatialViewer.GisCore", "0.4"));
         try
         {
@@ -604,7 +618,7 @@ internal sealed class HttpPmTilesByteSource : IPmTilesByteSource
             }
 
             var range = response.Content.Headers.ContentRange;
-            if (range?.From != offset || range.To != offset + length - 1L)
+            if (range?.From != signedOffset || range.To != end)
             {
                 throw new InvalidDataException("Remote PMTiles response returned an invalid Content-Range header.");
             }
