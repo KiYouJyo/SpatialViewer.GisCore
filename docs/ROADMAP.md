@@ -55,7 +55,7 @@
 - [x] GeoTIFF：ModelPixelScale/ModelTiepoint 与 ModelTransformation、GeoKey EPSG、PixelIsArea/PixelIsPoint、nodata、颜色模型、band metadata。
 - [x] tiled TIFF 仅解码与请求窗口相交的 tile；strip TIFF 仅解码与窗口相交的 strip，不先构造整幅 RGBA 图。
 - [x] 内部 TIFF overview 识别与按输出分辨率选择；窗口映射到 overview 后再解码/重采样。
-- [x] 本地 COG-compatible tiled/overview 读取路径建立；HTTP Range/远程 COG 属于 Phase 4 网络数据源，不在本阶段虚报支持。
+- [x] 本地 COG-compatible tiled/overview 读取路径建立；HTTP Range/远程 COG 在 Phase 4 补齐。
 - [x] PNG/JPEG + world file（PGW/JGW/长扩展名/WLD）与可选同名 PRJ；world-file 像素中心语义正规化为 Core 像素外框 affine transform。
 - [x] byte-budgeted LRU raster cache、`RasterViewportReader` 与 latest-request cancellation；新视口读取会取消被替代的旧请求。
 - [x] GeoTIFF、WorldImage 项目正式纳入 solution Debug/Release 配置。
@@ -65,11 +65,20 @@
 
 ## Phase 4 — 瓦片与网络数据源（0.4.x）
 
-- MBTiles、XYZ/TMS。
-- WMS/WMTS；网络请求、缓存、超时、重试与取消全部在 adapter 层。
-- MVT，随后评估 PMTiles。
-- HTTP Range / remote COG 读取与本地 raster window contract 对接。
-- 网络源与本地源共享统一图层接口，但缓存策略分离。
+**状态：✅ 已完成 managed baseline（2026-09-02）**
+
+- [x] Core 建立 backend-neutral tile contract：canonical XYZ 坐标、TMS 边界转换、Web Mercator tile bounds、encoded payload、byte-budgeted LRU cache 与 latest-request cancellation。
+- [x] MBTiles：SQLite metadata/tiles 表、TMS `tile_row` → canonical XYZ 转换、PNG/JPEG/WebP/MVT encoded payload；连接使用 read-only/private-cache/no-pooling。
+- [x] XYZ/TMS HTTP template：URL 模板、Y 翻转、404→null、超时、调用方取消、429/5xx/网络异常重试、ETag/Last-Modified 与独立 tile cache。
+- [x] Remote COG：HTTP Range-backed LibTiff stream，必须返回 `206 Partial Content` 与合法 `Content-Range`；支持 tiled GeoTIFF window read、internal overview 与 bounded range cache，不回退为整文件下载。
+- [x] WMS 1.3.0：独立 map-image request/result contract、GetMap、BBOX/尺寸/格式参数；EPSG:4326 明确遵循纬度优先轴序。
+- [x] WMTS 1.0.0：KVP GetTile baseline、TileMatrix 标识模板、XYZ/TMS row 边界转换与 tile cache。
+- [x] Managed MVT：自有 protobuf 读取、keys/values/tags、delta+zigzag geometry commands，Point/MultiPoint/LineString/MultiLineString/Polygon/MultiPolygon 转换为现有 `GisFeature` / `IGisGeometry`，tile-local 坐标映射至 EPSG:3857。
+- [x] PMTiles v3：127-byte header、Hilbert TileID、root/leaf varint directory、本地随机读取与远程 HTTP Range；支持 None/GZip/Brotli，MVT/PNG/JPEG/WebP；Zstd、AVIF、MapLibre Vector Tile 保持显式未支持边界。
+- [x] Phase 4 的 MBTiles / XyzTiles / RemoteCog / WebMap / Mvt / PmTiles 均为 solution 的直接 Debug/Release 成员，不依赖测试项目间接构建。
+- [x] 所有网络协议测试均使用确定性的自定义 `HttpMessageHandler` / synthetic archive，不依赖公共互联网。
+
+**验收结果**：本阶段的本地/网络瓦片、远程随机访问栅格、WMS/WMTS 与 MVT/PMTiles 读取链已闭环；远程 COG 与 PMTiles 都有“服务器忽略 Range 返回 200 时必须拒绝”的回归，避免隐藏整文件下载。严格 analyzer 下 Debug/Release 0 warning / 0 error；当前功能基线为 Core 16 + Formats 84 + Rendering 3 = 103/103 tests。最终发布 head 仍需在版本/文档收口后再次通过相同 CI，作为 0.4.0 权威验收记录。
 
 ## Phase 5 — GIS 显示语义（0.5.x）
 
@@ -83,14 +92,15 @@
 - 空间索引、对象池、几何简化、LOD、tile/feature cache。
 - 百万级/更大数据集压力测试、真实内存上限测试与 benchmark。
 - 大型 GeoTIFF/COG 的实际峰值内存、tile cache 命中率与快速拖拽取消压力测试。
+- 网络 tile/PMTiles/remote COG 的连接复用、Range cache 命中率与快速拖拽压力测试。
 - 与 QGIS/GDAL 的已知样例对照，维护兼容矩阵。
 - 崩溃/损坏文件 fuzz fixtures；所有 reader 错误必须可隔离。
 
 ## 1.0 验收线
 
 - P0：GeoJSON、Shapefile、GeoPackage、GeoTIFF + CRS 转换稳定。
-- 常用二维要素/栅格在 SpatialViewer 中显示结果可与主流 GIS 软件进行基准对照。
-- 大文件采用按需读取，不因单一图层导致 UI 进程不可恢复性内存峰值。
+- 常用二维要素/栅格/瓦片源在 SpatialViewer 中显示结果可与主流 GIS 软件进行基准对照。
+- 大文件采用按需读取，不因单一图层导致 UI 进程不可恢复性内存峰值；远程随机访问源不得偷偷退化为整文件下载。
 - 公共 API 有版本策略；第三方 native 依赖的许可、打包和更新边界明确。
 - 每个已宣称支持的格式均有合法测试 fixture 与回归测试。
 
