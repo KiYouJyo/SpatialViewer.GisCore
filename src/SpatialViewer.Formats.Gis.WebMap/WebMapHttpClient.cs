@@ -18,16 +18,9 @@ internal sealed class WebMapHttpClient
         TimeSpan retryDelay)
     {
         ArgumentNullException.ThrowIfNull(httpClient);
-        if (requestTimeout <= TimeSpan.Zero)
-        {
-            throw new ArgumentOutOfRangeException(nameof(requestTimeout));
-        }
-
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(requestTimeout, TimeSpan.Zero);
         ArgumentOutOfRangeException.ThrowIfNegative(maximumRetries);
-        if (retryDelay < TimeSpan.Zero)
-        {
-            throw new ArgumentOutOfRangeException(nameof(retryDelay));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(retryDelay, TimeSpan.Zero);
 
         _httpClient = httpClient;
         _requestTimeout = requestTimeout;
