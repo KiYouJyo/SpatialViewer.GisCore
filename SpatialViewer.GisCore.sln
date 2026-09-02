@@ -28,6 +28,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialViewer.Formats.Gis.G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialViewer.Formats.Gis.WorldImage", "src\SpatialViewer.Formats.Gis.WorldImage\SpatialViewer.Formats.Gis.WorldImage.csproj", "{D4444444-4444-4444-8444-444444444444}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialViewer.Formats.Gis.MbTiles", "src\SpatialViewer.Formats.Gis.MbTiles\SpatialViewer.Formats.Gis.MbTiles.csproj", "{E5555555-5555-4555-8555-555555555555}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialViewer.Formats.Gis.XyzTiles", "src\SpatialViewer.Formats.Gis.XyzTiles\SpatialViewer.Formats.Gis.XyzTiles.csproj", "{F6666666-6666-4666-8666-666666666666}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialViewer.Formats.Gis.RemoteCog", "src\SpatialViewer.Formats.Gis.RemoteCog\SpatialViewer.Formats.Gis.RemoteCog.csproj", "{A7777777-7777-4777-8777-777777777770}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialViewer.Formats.Gis.WebMap", "src\SpatialViewer.Formats.Gis.WebMap\SpatialViewer.Formats.Gis.WebMap.csproj", "{B8888888-8888-4888-8888-888888888880}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialViewer.Formats.Gis.Mvt", "src\SpatialViewer.Formats.Gis.Mvt\SpatialViewer.Formats.Gis.Mvt.csproj", "{C9999999-9999-4999-8999-999999999990}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpatialViewer.Formats.Gis.PmTiles", "src\SpatialViewer.Formats.Gis.PmTiles\SpatialViewer.Formats.Gis.PmTiles.csproj", "{DAAAAAAA-AAAA-4AAA-8AAA-AAAAAAAAAAA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,5 +98,29 @@ Global
 		{D4444444-4444-4444-8444-444444444444}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4444444-4444-4444-8444-444444444444}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4444444-4444-4444-8444-444444444444}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5555555-5555-4555-8555-555555555555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5555555-5555-4555-8555-555555555555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5555555-5555-4555-8555-555555555555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5555555-5555-4555-8555-555555555555}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6666666-6666-4666-8666-666666666666}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6666666-6666-4666-8666-666666666666}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6666666-6666-4666-8666-666666666666}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6666666-6666-4666-8666-666666666666}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7777777-7777-4777-8777-777777777770}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7777777-7777-4777-8777-777777777770}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7777777-7777-4777-8777-777777777770}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7777777-7777-4777-8777-777777777770}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8888888-8888-4888-8888-888888888880}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8888888-8888-4888-8888-888888888880}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8888888-8888-4888-8888-888888888880}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8888888-8888-4888-8888-888888888880}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9999999-9999-4999-8999-999999999990}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9999999-9999-4999-8999-999999999990}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9999999-9999-4999-8999-999999999990}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9999999-9999-4999-8999-999999999990}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAAAAAAA-AAAA-4AAA-8AAA-AAAAAAAAAAA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAAAAAAA-AAAA-4AAA-8AAA-AAAAAAAAAAA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAAAAAAA-AAAA-4AAA-8AAA-AAAAAAAAAAA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAAAAAAA-AAAA-4AAA-8AAA-AAAAAAAAAAA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

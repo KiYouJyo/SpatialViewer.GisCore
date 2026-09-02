@@ -2,9 +2,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SpatialViewer.Gis.Core\SpatialViewer.Gis.Core.csproj" />
     <ProjectReference Include="..\SpatialViewer.Formats.Gis\SpatialViewer.Formats.Gis.csproj" />
+    <ProjectReference Include="..\SpatialViewer.Formats.Gis.GeoTiff\SpatialViewer.Formats.Gis.GeoTiff.csproj" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.660" />
-  </ItemGroup>
-  <ItemGroup>
-    <InternalsVisibleTo Include="SpatialViewer.Formats.Gis.RemoteCog" />
   </ItemGroup>
 </Project>

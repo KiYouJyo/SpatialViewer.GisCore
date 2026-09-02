@@ -2,9 +2,6 @@
   <ItemGroup>
     <ProjectReference Include="..\SpatialViewer.Gis.Core\SpatialViewer.Gis.Core.csproj" />
     <ProjectReference Include="..\SpatialViewer.Formats.Gis\SpatialViewer.Formats.Gis.csproj" />
-    <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.660" />
-  </ItemGroup>
-  <ItemGroup>
-    <InternalsVisibleTo Include="SpatialViewer.Formats.Gis.RemoteCog" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.11" />
   </ItemGroup>
 </Project>
